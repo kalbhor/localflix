@@ -9,6 +9,10 @@ import (
 
 func SearchContent(title string) map[string]string {
 
+	var movielist map[string]*json.RawMessage
+	var searches = make([]*json.RawMessage, 2)
+	var target map[string]string
+
 	req, err := http.NewRequest("GET", "http://omdbapi.com", nil)
 	if err != nil {
 		panic(err)
@@ -24,15 +28,12 @@ func SearchContent(title string) map[string]string {
 
 	l_body, _ := ioutil.ReadAll(resp.Body)
 
-	var listmap map[string]*json.RawMessage
-	_ = json.Unmarshal(l_body, &listmap)
+	json.Unmarshal(l_body, &movielist)
 
-	var searches = make([]*json.RawMessage, 2)
-	_ = json.Unmarshal(*listmap["Search"], &searches)
+	json.Unmarshal(*movielist["Search"], &searches)
 
 	//Top search
-	var target map[string]string
-	_ = json.Unmarshal(*searches[0], &target)
+	json.Unmarshal(*searches[0], &target)
 
 	imdbID := target["imdbID"] //IMDb id for metadata
 
@@ -50,9 +51,8 @@ func SearchContent(title string) map[string]string {
 	resp, _ = http.Get(req.URL.String())
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	var jsonmap map[string]string
-	_ = json.Unmarshal(body, &jsonmap)
-	fmt.Printf("%v", jsonmap)
+	json.Unmarshal(body, &target)
+	fmt.Printf("%v", target)
 
-	return jsonmap
+	return target
 }
