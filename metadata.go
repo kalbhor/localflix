@@ -26,13 +26,13 @@ type Series struct {
 	Seasons []*Season
 }
 
-func NewMovie() *Movie {
-	m := &Movie{}
+func NewMovie(title string) *Movie {
+	m := &Movie{Title: title}
 	return m
 }
 
-func NewSeries() *Series {
-	s := &Series{}
+func NewSeries(title string) *Series {
+	s := &Series{Title: title}
 	return s
 }
 
@@ -89,9 +89,9 @@ func (s *Series) DisplayTree() {
 }
 
 func main() {
-	x := NewSeries()
+	x := NewSeries("Mr Robot")
+
 	y := NewSeason()
-	x.Title = "Mr Robot"
 	y.Title = "Season 1"
 	e := NewEpisode()
 	e.Title = "Pilot"
