@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -52,7 +51,6 @@ func SearchContent(title string) map[string]string {
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	json.Unmarshal(body, &target)
-	fmt.Printf("%v", target)
 
 	return target
 }
