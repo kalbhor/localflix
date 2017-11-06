@@ -1,15 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 type MediaFile struct {
 	Path        string
 	Title       string
 	Length      int
 	TotalLength int
-	Cast        []string
-	Directors   []string
+	Cast        string
+	Directors   string
+	Writers     string
 	Desc        string
+	Genre       string
 	Rating      float32
 	Uploaded    bool
 	IsManual    bool
@@ -30,8 +35,20 @@ type Series struct {
 	IsManual bool
 }
 
-func NewMovie(title string) *Movie {
-	m := &Movie{Title: title}
+func NewMovie(query string) *Movie {
+	content := SearchContent(query)
+	title := content["Title"]
+	writers := content["Writer"]
+	cast := content["Actors"]
+	directors := content["Director"]
+	desc := content["Plot"]
+	runtime := content["Runtime"]
+	total_time, _ := strconv.Atoi(runtime[:len(runtime)-4])
+	rating, _ := strconv.ParseFloat(content["imdbRating"], 32)
+	genre := content["Genre"]
+
+	m := &Movie{Title: title, Cast: cast, Writers: writers, Directors: directors, Desc: desc, TotalLength: total_time, Genre: genre, Rating: float32(rating)}
+
 	return m
 }
 
@@ -93,15 +110,18 @@ func (s *Series) DisplayTree() {
 	}
 }
 
-func main() {
-	x := NewSeries("Mr Robot")
+func (m *Movie) DisplayTree() {
+	fmt.Println(m.Title)
+	fmt.Println(m.Rating)
+	fmt.Println(m.TotalLength)
+	fmt.Println(m.Cast)
+	fmt.Println(m.Writers)
+	fmt.Println(m.Directors)
+	fmt.Println(m.Desc)
+}
 
-	y := NewSeason()
-	y.Title = "Season 1"
-	e := NewEpisode()
-	e.Title = "Pilot"
-	y.AddEpisode(e)
-	x.AddSeason(y)
+func main() {
+	x := NewMovie("The Prestige")
 
 	x.DisplayTree()
 
